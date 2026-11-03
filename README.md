@@ -39,8 +39,9 @@ Buat file `.env` berdasarkan template `.env.example`:
 
 | Nama Variabel | Wajib? | Keterangan | Contoh Nilai |
 |---|---|---|---|
-| `DATABASE_URL` | Ya | URL database libSQL / SQLite | `file:./local.db` (lokal) atau `libsql://nama-db-org.turso.io` (Turso) |
-| `DATABASE_AUTH_TOKEN` | Opsional | Token otentikasi Turso | Diisi jika menggunakan database cloud Turso |
+| `DATABASE_URL` (atau `TURSO_DATABASE_URL`) | Ya | URL database libSQL / SQLite | `file:./local.db` (lokal) atau `libsql://nama-db-org.turso.io` (Turso) |
+| `DATABASE_AUTH_TOKEN` (atau `TURSO_AUTH_TOKEN`) | Opsional | Token otentikasi Turso | Diisi jika menggunakan database cloud Turso |
+| `DATABASE_SYNC_URL` (atau `TURSO_SYNC_URL`) | Opsional | URL Turso untuk embedded replica | Diisi jika menggunakan mode embedded replica lokal |
 | `ADMIN_PASSWORD_HASH` | Ya | Hash bcrypt dari kata sandi login admin | Dibuat menggunakan perintah `npm run hash-password` |
 | `SESSION_SECRET` | Ya | Kunci rahasia penandatangan cookie sesi (≥ 32 karakter) | String acak minimal 32 karakter |
 | `SITE_URL` | Ya | URL publik situs untuk preview Open Graph | `http://localhost:3000` (lokal) atau `https://katalog.netlify.app` |
@@ -90,20 +91,89 @@ Buka browser pada alamat:
 
 ---
 
-## Menyiapkan Database Produksi (Turso)
+## Menyiapkan Database Turso (SQLite Cloud)
 
-1. Buat akun gratis di [turso.tech](https://turso.tech/).
-2. Buat database baru melalui CLI atau web dashboard Turso:
+Proyek ini menggunakan **[Turso](https://docs.turso.tech/)** (SQLite terdistribusi berbasis libSQL) yang sangat cepat, serverless-ready, dan hemat biaya.
+
+### 1. Membuat Database di Turso
+
+Kamu dapat membuat database melalui **Web Dashboard** atau **Turso CLI**:
+
+#### Opsi A: Lewat Web Dashboard (Tanpa Install CLI)
+1. Buka dan login ke [app.turso.tech](https://app.turso.tech/).
+2. Klik **Create Database**, beri nama misalnya `katalog-affiliate`, lalu pilih grup/region terdekat (contoh: Singapore `sin`).
+3. Setelah database dibuat, salin **Database URL** (berawalan `libsql://...`).
+4. Klik tab **Tokens** atau tombol **Generate Token**, lalu salin Token yang dihasilkan.
+
+#### Opsi B: Lewat Turso CLI (Terminal / WSL)
+1. Install Turso CLI:
    ```bash
+   # Di WSL / macOS / Linux:
+   curl -sSfL https://get.tur.so/install.sh | bash
+   ```
+2. Login dan buat database:
+   ```bash
+   turso auth login
    turso db create katalog-affiliate
    ```
-3. Dapatkan URL database dan auth token:
+3. Dapatkan Database URL dan Auth Token:
    ```bash
    turso db show katalog-affiliate --url
    turso db tokens create katalog-affiliate
    ```
-4. Masukkan URL ke `DATABASE_URL` dan token ke `DATABASE_AUTH_TOKEN`.
-5. Saat aplikasi dijalankan pertama kali, tabel-tabel database (`categories`, `products`, `profile`) akan dibuat secara otomatis jika belum ada.
+
+---
+
+### 2. Memasang Kredensial ke `.env`
+
+Masukkan kredensial Turso ke dalam file `.env`:
+```env
+DATABASE_URL=libsql://katalog-affiliate-username.turso.io
+DATABASE_AUTH_TOKEN=eyJh...
+```
+*(Catatan: Anda juga dapat menggunakan nama variabel `TURSO_DATABASE_URL` dan `TURSO_AUTH_TOKEN`).*
+
+---
+
+### 3. Menguji Koneksi ke Turso
+
+Jalankan perintah pengujian koneksi:
+```bash
+npm run db:test
+```
+Perintah ini akan memverifikasi URL, konektivitas libSQL, dan ketersediaan tabel database.
+
+---
+
+### 4. Mendorong Skema & Mengisi Data Awal ke Turso
+
+1. **Push Skema Database ke Turso**:
+   ```bash
+   npm run db:push
+   ```
+   *(Skema tabel `categories`, `products`, `profile` serta indeks akan langsung diterapkan ke Turso).*
+
+2. **Isi Data Contoh (Seeding)**:
+   ```bash
+   npm run db:seed
+   ```
+
+3. **Buka Drizzle Studio (Database GUI)**:
+   ```bash
+   npm run db:studio
+   ```
+   Buka URL lokal yang muncul (biasanya `https://local.drizzle.studio`) untuk melihat, mengedit, dan memfilter data di Turso secara langsung dari browser.
+
+---
+
+### 5. Fitur Turso Lainnya: Embedded Replicas (Opsional)
+
+Jika ingin aplikasi membaca dari file SQLite lokal berkecepatan mikrodetik namun otomatis tersinkronisasi dengan database cloud Turso, atur di `.env`:
+```env
+DATABASE_URL=file:./local.db
+DATABASE_SYNC_URL=libsql://katalog-affiliate-username.turso.io
+DATABASE_AUTH_TOKEN=token_turso_kamu
+```
 
 ---
 
@@ -162,3 +232,4 @@ Buka browser pada alamat:
 ├── nuxt.config.ts                  # Konfigurasi Nuxt
 └── prd-katalog-link-affiliate.md   # Dokumen spesifikasi PRD asli
 ```
+# gararetech-link-tree
