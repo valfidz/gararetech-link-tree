@@ -5,6 +5,17 @@ export default defineNuxtConfig({
   nitro: {
     preset: process.env.NITRO_PRESET || (process.env.NETLIFY ? 'netlify' : undefined)
   },
+  runtimeConfig: {
+    turso: {
+      databaseUrl: process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL || 'file:./local.db',
+      authToken: process.env.TURSO_AUTH_TOKEN || process.env.DATABASE_AUTH_TOKEN || ''
+    },
+    adminPasswordHash: process.env.ADMIN_PASSWORD_HASH || '',
+    sessionSecret: process.env.SESSION_SECRET || '',
+    public: {
+      siteUrl: process.env.SITE_URL || 'http://localhost:3000'
+    }
+  },
   app: {
     head: {
       htmlAttrs: {

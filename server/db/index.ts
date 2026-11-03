@@ -6,17 +6,51 @@ let _client: ReturnType<typeof createClient> | null = null
 let _db: ReturnType<typeof drizzle> | null = null
 let _initialized = false
 
+export function getTursoConfig() {
+  let url = process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL || process.env.NUXT_TURSO_DATABASE_URL
+  let authToken = process.env.TURSO_AUTH_TOKEN || process.env.DATABASE_AUTH_TOKEN || process.env.NUXT_TURSO_AUTH_TOKEN
+  const syncUrl = process.env.TURSO_SYNC_URL || process.env.DATABASE_SYNC_URL
+
+  // Read from Nuxt Nitro runtimeConfig if available
+  try {
+    // @ts-ignore
+    if (typeof useRuntimeConfig === 'function') {
+      // @ts-ignore
+      const config = useRuntimeConfig()
+      if (config?.turso?.databaseUrl) {
+        url = config.turso.databaseUrl
+      }
+      if (config?.turso?.authToken) {
+        authToken = config.turso.authToken
+      }
+    }
+  } catch {
+    // Outside of Nuxt runtime context (e.g. standalone scripts or drizzle-kit)
+  }
+
+  return {
+    url: url || 'file:./local.db',
+    authToken: authToken || undefined,
+    syncUrl: syncUrl || undefined
+  }
+}
+
+export function getClient() {
+  if (!_client) {
+    const config = getTursoConfig()
+    _client = createClient({
+      url: config.url,
+      authToken: config.authToken,
+      syncUrl: config.syncUrl
+    })
+  }
+  return _client
+}
+
 export function getDb() {
   if (!_db) {
-    const url = process.env.DATABASE_URL || 'file:./local.db'
-    const authToken = process.env.DATABASE_AUTH_TOKEN
-
-    _client = createClient({
-      url,
-      authToken: authToken || undefined
-    })
-
-    _db = drizzle(_client, { schema })
+    const client = getClient()
+    _db = drizzle(client, { schema })
   }
   return _db
 }

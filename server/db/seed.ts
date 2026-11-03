@@ -1,3 +1,9 @@
+if (typeof process.loadEnvFile === 'function') {
+  try {
+    process.loadEnvFile()
+  } catch {}
+}
+
 import { getDb, ensureTablesExist } from './index'
 import { categories, products, profile } from './schema'
 import { eq } from 'drizzle-orm'
