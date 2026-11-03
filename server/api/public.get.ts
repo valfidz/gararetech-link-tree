@@ -19,9 +19,10 @@ export default defineEventHandler(async (event) => {
         id: 1,
         brandName: 'Katalog Affiliate',
         bio: '',
-        avatarUrl: null,
+        avatarUrl: '/logo-profile.png',
         xUrl: null,
         facebookUrl: null,
+        youtubeUrl: null,
         updatedAt: new Date().toISOString()
       }
     }
@@ -67,9 +68,10 @@ export default defineEventHandler(async (event) => {
       profile: {
         brandName: userProfile.brandName,
         bio: userProfile.bio,
-        avatarUrl: userProfile.avatarUrl,
+        avatarUrl: userProfile.avatarUrl || '/logo-profile.png',
         xUrl: userProfile.xUrl,
-        facebookUrl: userProfile.facebookUrl
+        facebookUrl: userProfile.facebookUrl,
+        youtubeUrl: userProfile.youtubeUrl
       },
       categories: categoriesWithProducts
     }

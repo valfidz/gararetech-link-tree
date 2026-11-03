@@ -9,7 +9,7 @@ Dibuat sesuai spesifikasi dokumen [PRD Katalog Link Affiliate](./prd-katalog-lin
 ## Fitur Utama
 
 - **Halaman Publik Mobile-First**:
-  - Header profil: Avatar foto lingkaran 84px, nama brand, bio singkat, dan tombol sosial media (X dan Facebook).
+  - Header profil: Avatar foto lingkaran 84px, nama brand, bio singkat, dan tombol sosial media (X, Facebook, dan YouTube).
   - Accordion Kategori Eksklusif: Hanya satu kategori yang terbuka dalam satu waktu, mempermudah navigasi pada layar HP.
   - Tombol Produk Ramah Sentuhan: Tinggi minimal 48px dengan tautan affiliate yang aman (`target="_blank"` dan `rel="noopener noreferrer sponsored nofollow"`).
   - Footer Disclaimer Affiliate sesuai etika dan regulasi transparansi.

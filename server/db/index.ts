@@ -96,9 +96,17 @@ export async function ensureTablesExist() {
       avatar_url   TEXT,
       x_url        TEXT,
       facebook_url TEXT,
+      youtube_url  TEXT,
       updated_at   TEXT NOT NULL
     );
   `)
+
+  // Safe schema migration for existing databases
+  try {
+    await db.run(`ALTER TABLE profile ADD COLUMN youtube_url TEXT;`)
+  } catch {
+    // Column already exists
+  }
 
   _initialized = true
 }

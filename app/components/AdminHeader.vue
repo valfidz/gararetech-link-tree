@@ -1,7 +1,10 @@
 <template>
   <header class="admin-top-nav">
     <div class="nav-brand">
-      <NuxtLink to="/admin" class="nav-title">Admin Katalog</NuxtLink>
+      <NuxtLink to="/admin" class="nav-title">
+        <img src="/favicon.png" alt="Logo" class="nav-logo" width="24" height="24" />
+        <span>Admin Katalog</span>
+      </NuxtLink>
     </div>
     <div class="nav-actions">
       <NuxtLink to="/" target="_blank" class="nav-link view-public" title="Buka Halaman Publik">
@@ -61,9 +64,19 @@ const handleLogout = async () => {
 }
 
 .nav-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 18px;
   font-weight: 700;
   color: var(--text-main);
+  text-decoration: none;
+}
+
+.nav-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .nav-actions {

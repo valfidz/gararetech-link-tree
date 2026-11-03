@@ -83,12 +83,12 @@
             <input
               id="avatar-url"
               v-model="form.avatarUrl"
-              type="url"
-              placeholder="https://contoh.com/foto-profil.jpg"
+              type="text"
+              placeholder="https://contoh.com/foto.jpg atau /logo-profile.png"
               class="form-input"
               @input="previewError = false"
             />
-            <small class="form-hint">Masukkan tautan langsung gambar (JPG, PNG, WebP). Pratinjau muncul di sebelah kiri.</small>
+            <small class="form-hint">Masukkan tautan langsung gambar (URL eksternal atau path lokal seperti /logo-profile.png). Pratinjau muncul di sebelah kiri.</small>
           </div>
         </div>
       </div>
@@ -119,6 +119,19 @@
         <small class="form-hint">Kosongkan jika tidak ingin menampilkan tombol Facebook di halaman publik.</small>
       </div>
 
+      <!-- Akun YouTube -->
+      <div class="form-group">
+        <label for="youtube-url" class="form-label">URL Akun YouTube</label>
+        <input
+          id="youtube-url"
+          v-model="form.youtubeUrl"
+          type="url"
+          placeholder="https://youtube.com/@username"
+          class="form-input"
+        />
+        <small class="form-hint">Kosongkan jika tidak ingin menampilkan tombol YouTube di halaman publik.</small>
+      </div>
+
       <div class="form-submit-row">
         <NuxtLink to="/admin" class="secondary-btn">Kembali</NuxtLink>
         <button type="submit" class="primary-btn" :disabled="submitting">
@@ -144,6 +157,7 @@ interface ProfileData {
   avatarUrl: string | null
   xUrl: string | null
   facebookUrl: string | null
+  youtubeUrl: string | null
 }
 
 useHead({
@@ -157,7 +171,8 @@ const form = reactive({
   bio: '',
   avatarUrl: '',
   xUrl: '',
-  facebookUrl: ''
+  facebookUrl: '',
+  youtubeUrl: ''
 })
 
 const previewError = ref(false)
@@ -186,6 +201,7 @@ watch(
       form.avatarUrl = val.avatarUrl || ''
       form.xUrl = val.xUrl || ''
       form.facebookUrl = val.facebookUrl || ''
+      form.youtubeUrl = val.youtubeUrl || ''
     }
   },
   { immediate: true }
@@ -211,7 +227,8 @@ const handleSaveProfile = async () => {
         bio: form.bio,
         avatarUrl: form.avatarUrl,
         xUrl: form.xUrl,
-        facebookUrl: form.facebookUrl
+        facebookUrl: form.facebookUrl,
+        youtubeUrl: form.youtubeUrl
       }
     })
     showFeedback(res.message || 'Profil berhasil disimpan.')

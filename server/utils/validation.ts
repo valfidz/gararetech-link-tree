@@ -52,11 +52,14 @@ export function validateOptionalUrl(url: unknown, fieldName: string): string | n
     return null
   }
   const trimmed = url.trim()
+  if (trimmed.startsWith('/')) {
+    return trimmed
+  }
   const lower = trimmed.toLowerCase()
   if (!lower.startsWith('http://') && !lower.startsWith('https://')) {
     throw createError({
       statusCode: 400,
-      statusMessage: `URL ${fieldName} harus diawali dengan http:// atau https://`
+      statusMessage: `URL ${fieldName} harus diawali dengan http://, https://, atau path /`
     })
   }
   try {

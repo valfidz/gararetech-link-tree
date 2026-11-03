@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
   const avatarUrl = validateOptionalUrl(body?.avatarUrl, 'Foto')
   const xUrl = validateOptionalUrl(body?.xUrl, 'Akun X')
   const facebookUrl = validateOptionalUrl(body?.facebookUrl, 'Akun Facebook')
+  const youtubeUrl = validateOptionalUrl(body?.youtubeUrl, 'Akun YouTube')
 
   await ensureTablesExist()
   const db = getDb()
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event) => {
         avatarUrl,
         xUrl,
         facebookUrl,
+        youtubeUrl,
         updatedAt: now
       })
       .returning()
@@ -46,6 +48,7 @@ export default defineEventHandler(async (event) => {
         avatarUrl,
         xUrl,
         facebookUrl,
+        youtubeUrl,
         updatedAt: now
       })
       .where(eq(profile.id, 1))

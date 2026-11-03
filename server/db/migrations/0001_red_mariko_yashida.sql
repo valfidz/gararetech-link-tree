@@ -1,0 +1,1 @@
+ALTER TABLE `profile` ADD `youtube_url` text;

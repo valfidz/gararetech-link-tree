@@ -5,13 +5,9 @@ export default defineNuxtConfig({
   nitro: {
     preset: process.env.NITRO_PRESET || (process.env.NETLIFY ? 'netlify' : undefined)
   },
+  // Private secrets are read dynamically at runtime via process.env in server routes,
+  // preventing Vite/Nitro from inlining sensitive build-time environment variables.
   runtimeConfig: {
-    turso: {
-      databaseUrl: process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL || 'file:./local.db',
-      authToken: process.env.TURSO_AUTH_TOKEN || process.env.DATABASE_AUTH_TOKEN || ''
-    },
-    adminPasswordHash: process.env.ADMIN_PASSWORD_HASH || '',
-    sessionSecret: process.env.SESSION_SECRET || '',
     public: {
       siteUrl: process.env.SITE_URL || 'http://localhost:3000'
     }
@@ -26,6 +22,9 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=5' }
       ],
       link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {

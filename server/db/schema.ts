@@ -35,6 +35,7 @@ export const profile = sqliteTable('profile', {
   avatarUrl: text('avatar_url'),
   xUrl: text('x_url'),
   facebookUrl: text('facebook_url'),
+  youtubeUrl: text('youtube_url'),
   updatedAt: text('updated_at').notNull()
 })
 

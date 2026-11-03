@@ -16,12 +16,16 @@ export default defineEventHandler(async (event) => {
       id: 1,
       brandName: '',
       bio: '',
-      avatarUrl: null,
+      avatarUrl: '/logo-profile.png',
       xUrl: null,
       facebookUrl: null,
+      youtubeUrl: null,
       updatedAt: new Date().toISOString()
     }
   }
 
-  return userProfile
+  return {
+    ...userProfile,
+    avatarUrl: userProfile.avatarUrl || '/logo-profile.png'
+  }
 })

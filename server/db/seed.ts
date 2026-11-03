@@ -22,9 +22,10 @@ export async function runSeed() {
       id: 1,
       brandName: 'GarareTech',
       bio: 'Rekomendasi gadget, aksesoris smartphone, dan setup meja kerja terbaik pilihan kami.',
-      avatarUrl: '',
+      avatarUrl: '/logo-profile.png',
       xUrl: 'https://x.com/gararetech',
       facebookUrl: 'https://facebook.com/gararetech',
+      youtubeUrl: 'https://www.youtube.com/@gararetech',
       updatedAt: now
     })
   }
